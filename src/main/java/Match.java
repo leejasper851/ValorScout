@@ -9,12 +9,12 @@
  * @author lee_934859
  */
 public abstract class Match {
-    private Team red1;
-    private Team red2;
-    private Team red3;
-    private Team blue1;
-    private Team blue2;
-    private Team blue3;
+    private int red1;
+    private int red2;
+    private int red3;
+    private int blue1;
+    private int blue2;
+    private int blue3;
     private int redScore1;
     private int redScore2;
     private int redScore3;
@@ -26,13 +26,15 @@ public abstract class Match {
     private int realRedScore;
     private int realBlueScore;
 
-    public Match(Team red1, Team red2, Team red3, Team blue1, Team blue2, Team blue3) {
+    public Match(int red1, int red2, int red3, int blue1, int blue2, int blue3, int realRedScore, int realBlueScore) {
         this.red1 = red1;
         this.red2 = red2;
         this.red3 = red3;
         this.blue1 = blue1;
         this.blue2 = blue2;
         this.blue3 = blue3;
+        this.realRedScore = realRedScore;
+        this.realBlueScore = realBlueScore;
         
         redScore1 = 0;
         redScore2 = 0;
@@ -42,40 +44,31 @@ public abstract class Match {
         blueScore3 = 0;
         scoutRedScore = 0;
         scoutBlueScore = 0;
-        realRedScore = 0;
-        realBlueScore = 0;
     }
 
-    public Team getRed1() {
+    public int getRed1() {
         return red1;
     }
 
-
-    public Team getRed2() {
+    public int getRed2() {
         return red2;
     }
 
-
-
-    public Team getRed3() {
+    public int getRed3() {
         return red3;
     }
 
-
-    public Team getBlue1() {
+    public int getBlue1() {
         return blue1;
     }
 
-
-    public Team getBlue2() {
+    public int getBlue2() {
         return blue2;
     }
 
-
-    public Team getBlue3() {
+    public int getBlue3() {
         return blue3;
     }
-
 
     public int getRedScore1() {
         return redScore1;
@@ -156,8 +149,4 @@ public abstract class Match {
     public void setRealBlueScore(int realBlueScore) {
         this.realBlueScore = realBlueScore;
     }
-    
-    
-    
-    
 }

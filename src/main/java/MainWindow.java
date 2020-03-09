@@ -1,5 +1,12 @@
 
+import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import okhttp3.*;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,15 +21,20 @@ import java.util.*;
 public class MainWindow extends javax.swing.JFrame {
     private TreeMap<Integer, Team> teams;
     private TreeSet<Integer> rankedTeams;
-    private TreeSet<QualsMatch> matches;
+    private TreeMap<Integer, QualsMatch> matches;
+    private String eventKey;
     
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
+        
+        teams = new TreeMap<>();
+        rankedTeams = new TreeSet<>();
+        matches = new TreeMap<>();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,11 +50,15 @@ public class MainWindow extends javax.swing.JFrame {
         table_teams = new javax.swing.JTable();
         comboBox_displayStat = new javax.swing.JComboBox();
         panel_matches = new javax.swing.JPanel();
+        scrollPane_matches = new javax.swing.JScrollPane();
+        table_matches = new javax.swing.JTable();
         panel_scouting = new javax.swing.JPanel();
+        scrollPane_scouting = new javax.swing.JScrollPane();
+        table_scouting = new javax.swing.JTable();
         panel_simulations = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         menu_file = new javax.swing.JMenu();
-        menu_team = new javax.swing.JMenu();
+        menuItem_setEvent = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,11 +88,6 @@ public class MainWindow extends javax.swing.JFrame {
         scrollPane_teams.setViewportView(table_teams);
 
         comboBox_displayStat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboBox_displayStat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBox_displayStatActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout panel_teamsLayout = new javax.swing.GroupLayout(panel_teams);
         panel_teams.setLayout(panel_teamsLayout);
@@ -99,28 +110,83 @@ public class MainWindow extends javax.swing.JFrame {
 
         tabbedPane.addTab("Teams", panel_teams);
 
+        table_matches.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Match", "R1", "R2", "R3", "B1", "B2", "B3", "R Score", "B Score"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        scrollPane_matches.setViewportView(table_matches);
+
         javax.swing.GroupLayout panel_matchesLayout = new javax.swing.GroupLayout(panel_matches);
         panel_matches.setLayout(panel_matchesLayout);
         panel_matchesLayout.setHorizontalGroup(
             panel_matchesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 802, Short.MAX_VALUE)
+            .addComponent(scrollPane_matches, javax.swing.GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
         );
         panel_matchesLayout.setVerticalGroup(
             panel_matchesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addComponent(scrollPane_matches, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Matches", panel_matches);
+
+        table_scouting.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Match", "R1", "R2", "R3", "B1", "B2", "B3"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        table_scouting.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_scoutingMouseClicked(evt);
+            }
+        });
+        scrollPane_scouting.setViewportView(table_scouting);
 
         javax.swing.GroupLayout panel_scoutingLayout = new javax.swing.GroupLayout(panel_scouting);
         panel_scouting.setLayout(panel_scoutingLayout);
         panel_scoutingLayout.setHorizontalGroup(
             panel_scoutingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 802, Short.MAX_VALUE)
+            .addComponent(scrollPane_scouting, javax.swing.GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
         );
         panel_scoutingLayout.setVerticalGroup(
             panel_scoutingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addComponent(scrollPane_scouting, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Scouting", panel_scouting);
@@ -129,7 +195,7 @@ public class MainWindow extends javax.swing.JFrame {
         panel_simulations.setLayout(panel_simulationsLayout);
         panel_simulationsLayout.setHorizontalGroup(
             panel_simulationsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 802, Short.MAX_VALUE)
+            .addGap(0, 804, Short.MAX_VALUE)
         );
         panel_simulationsLayout.setVerticalGroup(
             panel_simulationsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,10 +205,16 @@ public class MainWindow extends javax.swing.JFrame {
         tabbedPane.addTab("Simulations", panel_simulations);
 
         menu_file.setText("File");
-        menuBar.add(menu_file);
 
-        menu_team.setText("Team");
-        menuBar.add(menu_team);
+        menuItem_setEvent.setText("Set Event");
+        menuItem_setEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem_setEventActionPerformed(evt);
+            }
+        });
+        menu_file.add(menuItem_setEvent);
+
+        menuBar.add(menu_file);
 
         setJMenuBar(menuBar);
 
@@ -160,9 +232,37 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboBox_displayStatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_displayStatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBox_displayStatActionPerformed
+    private void menuItem_setEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_setEventActionPerformed
+        String origKey = String.valueOf(eventKey);
+        
+        SetEventDialog dialog = new SetEventDialog(this, true);
+        dialog.setTitle("Set Event");
+        dialog.setVisible(true);
+        
+        if (eventKey != origKey) {
+            loadEvent();
+        }
+    }//GEN-LAST:event_menuItem_setEventActionPerformed
+
+    private void table_scoutingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_scoutingMouseClicked
+        if (evt.getClickCount() == 2) {
+            int clickRow = table_scouting.getSelectedRow();
+            int clickCol = table_scouting.getSelectedColumn();
+            if (clickCol == 0) {
+                return;
+            }
+            
+            int team = (int) table_scouting.getValueAt(clickRow, clickCol);
+            int match = clickRow+1;
+            
+            MatchStat matchStat = new MatchStat();
+            teams.get(team).addTeamStat(match, matchStat);
+            
+            ScoutingWindow scoutingWindow = new ScoutingWindow(this, matchStat);
+            scoutingWindow.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            scoutingWindow.setVisible(true);
+        }
+    }//GEN-LAST:event_table_scoutingMouseClicked
 
     /**
      * @param args the command line arguments
@@ -202,14 +302,211 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox comboBox_displayStat;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItem_setEvent;
     private javax.swing.JMenu menu_file;
-    private javax.swing.JMenu menu_team;
     private javax.swing.JPanel panel_matches;
     private javax.swing.JPanel panel_scouting;
     private javax.swing.JPanel panel_simulations;
     private javax.swing.JPanel panel_teams;
+    private javax.swing.JScrollPane scrollPane_matches;
+    private javax.swing.JScrollPane scrollPane_scouting;
     private javax.swing.JScrollPane scrollPane_teams;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTable table_matches;
+    private javax.swing.JTable table_scouting;
     private javax.swing.JTable table_teams;
     // End of variables declaration//GEN-END:variables
+    
+    public void setEventKey(String eventKey) {
+        this.eventKey = eventKey;
+    }
+    
+    private JSONArray getJSONArray(String url) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+            .header("X-TBA-Auth-Key", "j62Ln03NS6nIrke6c9YiRvRvDmNLSys92adlRZfoeEm1dcCPZ8OMRq2xDd6KtJDO")
+            .url("https://www.thebluealliance.com/api/v3" + url)
+            .build();
+        
+        String jsonStr = "";
+        try {
+            try (Response response = client.newCall(request).execute()) {
+                jsonStr = response.body().string();
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "ERROR: Cannot access Blue Alliance!", "Blue Alliance Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
+        Object jsonRaw;
+        try {
+            jsonRaw = new JSONParser().parse(jsonStr);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "ERROR: Cannot parse Blue Alliance data!", "Blue Alliance Data Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
+        if (jsonRaw instanceof JSONObject) {
+            JOptionPane.showMessageDialog(this, "ERROR: Event key not found!", "Event Key Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
+        return (JSONArray) jsonRaw;
+    }
+    
+    private JSONObject getJSONObject(String url) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+            .header("X-TBA-Auth-Key", "j62Ln03NS6nIrke6c9YiRvRvDmNLSys92adlRZfoeEm1dcCPZ8OMRq2xDd6KtJDO")
+            .url("https://www.thebluealliance.com/api/v3" + url)
+            .build();
+
+        String jsonStr = "";
+        try {
+            try (Response response = client.newCall(request).execute()) {
+                jsonStr = response.body().string();
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "ERROR: Cannot access Blue Alliance!", "Blue Alliance Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        Object jsonRaw;
+        try {
+            jsonRaw = new JSONParser().parse(jsonStr);
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "ERROR: Cannot parse Blue Alliance data!", "Blue Alliance Data Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
+        JSONObject jsonObj = (JSONObject) jsonRaw;
+        if (jsonObj.containsKey("Errors")) {
+            JOptionPane.showMessageDialog(this, "ERROR: Event key not found!", "Event Key Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        
+        return jsonObj;
+    }
+    
+    private void loadEvent() {
+        boolean loadTeamsRes = loadEventTeams();
+        if (!loadTeamsRes) {
+            return;
+        }
+        loadEventMatches();
+    }
+    
+    private boolean loadEventTeams() {
+        JSONArray jsonArr = getJSONArray("/event/" + eventKey + "/teams/simple");
+        if (jsonArr == null) {
+            return false;
+        }
+        
+        teams.clear();
+        for (Object obj : jsonArr) {
+            JSONObject jsonObj = (JSONObject) obj;
+            
+            int teamNum = (int) (long) jsonObj.get("team_number");
+            String teamName = (String) jsonObj.get("nickname");
+            
+            teams.put(teamNum, new Team(teamNum, teamName));
+        }
+        
+        updateTeamsTable();
+        
+        return true;
+    }
+    
+    private void loadEventMatches() {
+        JSONArray jsonArr = getJSONArray("/event/" + eventKey + "/matches/simple");
+        if (jsonArr == null) {
+            return;
+        }
+        
+        matches.clear();
+        for (Object obj : jsonArr) {
+            JSONObject jsonObj = (JSONObject) obj;
+            
+            if (!((String) jsonObj.get("key")).contains("qm")) {
+                continue;
+            }
+            
+            int matchNum = (int) (long) jsonObj.get("match_number");
+            JSONObject alliances = (JSONObject) jsonObj.get("alliances");
+            JSONObject redAlliance = (JSONObject) alliances.get("red");
+            JSONArray redTeams = (JSONArray) redAlliance.get("team_keys");
+            int red1 = Integer.parseInt(((String) redTeams.get(0)).substring(3));
+            int red2 = Integer.parseInt(((String) redTeams.get(1)).substring(3));
+            int red3 = Integer.parseInt(((String) redTeams.get(2)).substring(3));
+            int redScore = (int) (long) redAlliance.get("score");
+            JSONObject blueAlliance = (JSONObject) alliances.get("blue");
+            JSONArray blueTeams = (JSONArray) blueAlliance.get("team_keys");
+            int blue1 = Integer.parseInt(((String) blueTeams.get(0)).substring(3));
+            int blue2 = Integer.parseInt(((String) blueTeams.get(1)).substring(3));
+            int blue3 = Integer.parseInt(((String) blueTeams.get(2)).substring(3));
+            int blueScore = (int) (long) blueAlliance.get("score");
+            
+            matches.put(matchNum, new QualsMatch(matchNum, red1, red2, red3, blue1, blue2, blue3, redScore, blueScore));
+        }
+        
+        updateMatchesTable();
+        updateScoutingTable();
+    }
+    
+    private void updateTeamsTable() {
+        DefaultTableModel model = (DefaultTableModel) table_teams.getModel();
+        model.setRowCount(0);
+        
+        for (Team team : teams.values()) {
+            Object[] teamData = new Object[7];
+            teamData[0] = team.getNumber();
+            teamData[1] = team.getName();
+            teamData[2] = team.getRp();
+            teamData[3] = team.getOpr();
+            teamData[4] = team.getDpr();
+            String teamMatches = team.getTeamStats().keySet().toString();
+            teamMatches = teamMatches.substring(1, teamMatches.length()-1);
+            teamData[5] = teamMatches;
+            
+            model.addRow(teamData);
+        }
+    }
+    
+    private void updateMatchesTable() {
+        DefaultTableModel model = (DefaultTableModel) table_matches.getModel();
+        model.setRowCount(0);
+        
+        for (QualsMatch match : matches.values()) {
+            Object[] matchData = new Object[9];
+            matchData[0] = match.toString();
+            matchData[1] = match.getRed1();
+            matchData[2] = match.getRed2();
+            matchData[3] = match.getRed3();
+            matchData[4] = match.getBlue1();
+            matchData[5] = match.getBlue2();
+            matchData[6] = match.getBlue3();
+            matchData[7] = (match.getRealRedScore() == 0) ? match.getScoutRedScore() : match.getRealRedScore();
+            matchData[8] = (match.getRealBlueScore() == 0) ? match.getScoutBlueScore() : match.getRealBlueScore();
+            
+            model.addRow(matchData);
+        }
+    }
+    
+    private void updateScoutingTable() {
+        DefaultTableModel model = (DefaultTableModel) table_scouting.getModel();
+        model.setRowCount(0);
+        
+        for (QualsMatch match : matches.values()) {
+            Object[] matchData = new Object[9];
+            matchData[0] = match.toString();
+            matchData[1] = match.getRed1();
+            matchData[2] = match.getRed2();
+            matchData[3] = match.getRed3();
+            matchData[4] = match.getBlue1();
+            matchData[5] = match.getBlue2();
+            matchData[6] = match.getBlue3();
+            
+            model.addRow(matchData);
+        }
+    }
 }

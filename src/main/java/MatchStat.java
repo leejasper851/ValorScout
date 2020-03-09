@@ -8,7 +8,7 @@
  *
  * @author lee_934859
  */
-public class MatchStats {
+public class MatchStat {
     private boolean crossLine;
     private int autoShieldBottom;
     private int autoShieldTop;
@@ -22,10 +22,9 @@ public class MatchStats {
     private boolean hang;
     private boolean level;
     private int host;
-    private int penalties;
-    private int totalPoints;
+    private int defense;
 
-    public MatchStats() {
+    public MatchStat() {
         crossLine = false;
         autoShieldBottom = 0;
         autoShieldTop = 0;
@@ -39,29 +38,8 @@ public class MatchStats {
         hang = false;
         level = false;
         host = 0;
-        penalties = 0;
-        totalPoints = 0;
+        defense = 0;
     }
-    
-    
-    public MatchStats(boolean crossLine, int autoShieldBottom, int autoShieldTop, int autoShieldInner, int teleShieldBottom, int teleShieldTop, int teleShieldInner, boolean rotControl, boolean posControl, boolean park, boolean hang, boolean level, int host, int penalties) {
-        this.crossLine = crossLine;
-        this.autoShieldBottom = autoShieldBottom;
-        this.autoShieldTop = autoShieldTop;
-        this.autoShieldInner = autoShieldInner;
-        this.teleShieldBottom = teleShieldBottom;
-        this.teleShieldTop = teleShieldTop;
-        this.teleShieldInner = teleShieldInner;
-        this.rotControl = rotControl;
-        this.posControl = posControl;
-        this.park = park;
-        this.hang = hang;
-        this.level = level;
-        this.host = host;
-        this.penalties = penalties;
-        totalPoints = 0;
-    }
-    
     
     public boolean isCrossLine() {
         return crossLine;
@@ -167,20 +145,19 @@ public class MatchStats {
         this.host = host;
     }
 
-    public int getPenalties() {
-        return penalties;
+    public int getDefense() {
+        return defense;
     }
 
-    public void setPenalties(int penalties) {
-        this.penalties = penalties;
+    public void setDefense(int defense) {
+        this.defense = defense;
     }
     
     public int getTotalPoints() {
-        totalPoints = (crossLine ? 5 : 0) + autoShieldBottom * 2 + autoShieldTop * 4 + autoShieldInner * 6
+        int totalPoints = (crossLine ? 5 : 0) + autoShieldBottom * 2 + autoShieldTop * 4 + autoShieldInner * 6
                 + teleShieldBottom + teleShieldTop * 2 + teleShieldInner * 3
                 + (rotControl ? 10 : 0) + (posControl ? 20 : 0)
-                + (park ? 5 : 0) + (hang ? 25 : 0) + (level ? 15 : 0) + host * 25
-                - penalties;
+                + (park ? 5 : 0) + (hang ? 25 : 0) + (level ? 15 : 0) + host * 25;
         return totalPoints;
     }
 }

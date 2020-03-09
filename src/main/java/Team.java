@@ -16,7 +16,7 @@ public class Team {
     private int rp;
     private int opr;
     private int dpr;
-    private TreeMap<Integer, MatchStats> teamStats;
+    private TreeMap<Integer, MatchStat> teamStats;
     
     public Team(int number, String name) {
         this.number = number;
@@ -25,6 +25,14 @@ public class Team {
         opr = 0;
         dpr = 0;
         teamStats = new TreeMap<>();
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public String getName() {
+        return name;
     }
     
     public int getRp() {
@@ -51,11 +59,11 @@ public class Team {
         this.dpr = dpr;
     }
 
-    public TreeMap<Integer, MatchStats> getTeamStats() {
+    public TreeMap<Integer, MatchStat> getTeamStats() {
         return teamStats;
     }
 
-    public void addTeamStat(int matchNum, MatchStats teamStat) {
+    public void addTeamStat(int matchNum, MatchStat teamStat) {
         teamStats.put(matchNum, teamStat);
     }
 }

@@ -9,15 +9,14 @@
  * @author lee_934859
  */
 public class QualsMatch extends Match {
-    
     private int matchNumber;
     
-    public QualsMatch (int matchNumber, Team red1, Team red2, Team red3, Team blue1, Team blue2, Team blue3) {
-        super(red1, red2, red3, blue1, blue2, blue3);
+    public QualsMatch (int matchNumber, int red1, int red2, int red3, int blue1, int blue2, int blue3, int realRedScore, int realBlueScore) {
+        super(red1, red2, red3, blue1, blue2, blue3, realRedScore, realBlueScore);
         this.matchNumber = matchNumber;
     }
     
     public String toString(){
-        return "";
+        return "Q-" + matchNumber;
     }
 }
