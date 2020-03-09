@@ -27,18 +27,25 @@ public class ScoutingWindow extends javax.swing.JFrame {
         matchStat = ms;
         
         table_scouting.setValueAt("Cross Line", 0, 0);
-        table_scouting.setValueAt("Level 1", 1, 0);
-        table_scouting.setValueAt("Level 2", 2, 0);
-        table_scouting.setValueAt("Level 3", 3, 0);
-        table_scouting.setValueAt("Level 1", 0, 2);
-        table_scouting.setValueAt("Level 2", 1, 2);
-        table_scouting.setValueAt("Level 3", 2, 2);
+        table_scouting.setValueAt("Bottom", 1, 0);
+        table_scouting.setValueAt("Top", 2, 0);
+        table_scouting.setValueAt("Inner", 3, 0);
+        table_scouting.setValueAt(0, 1, 1);
+        table_scouting.setValueAt(0, 2, 1);
+        table_scouting.setValueAt(0, 3, 1);
+        table_scouting.setValueAt("Bottom", 0, 2);
+        table_scouting.setValueAt("Top", 1, 2);
+        table_scouting.setValueAt("Inner", 2, 2);
         table_scouting.setValueAt("Rot Control", 3, 2);
         table_scouting.setValueAt("Pos Control", 4, 2);
+        table_scouting.setValueAt(0, 0, 3);
+        table_scouting.setValueAt(0, 1, 3);
+        table_scouting.setValueAt(0, 2, 3);
         table_scouting.setValueAt("Park", 0, 4);
         table_scouting.setValueAt("Hang", 1, 4);
         table_scouting.setValueAt("Level", 2, 4);
         table_scouting.setValueAt("Host", 3, 4);
+        table_scouting.setValueAt(0, 3, 5);
         table_scouting.setValueAt("-1", 0, 6);
         table_scouting.setValueAt("0", 1, 6);
         table_scouting.setValueAt("1", 2, 6);
@@ -116,7 +123,90 @@ public class ScoutingWindow extends javax.swing.JFrame {
         int clickRow = table_scouting.getSelectedRow();
         int clickCol = table_scouting.getSelectedColumn();
         if (clickRow == 0 && clickCol <= 1) {
-            
+            matchStat.setCrossLine(!matchStat.isCrossLine());
+            table_scouting.setValueAt(table_scouting.getValueAt(0, 0), 0, 0);
+            table_scouting.setValueAt(table_scouting.getValueAt(0, 1), 0, 1);
+        }
+        if (clickRow == 1 && clickCol == 0) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setAutoShieldBottom(matchStat.getAutoShieldBottom() + 1);
+            } else {
+                matchStat.setAutoShieldBottom(matchStat.getAutoShieldBottom() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getAutoShieldBottom(), 1, 1);
+        }
+        if (clickRow == 2 && clickCol == 0) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setAutoShieldTop(matchStat.getAutoShieldTop() + 1);
+            } else {
+                matchStat.setAutoShieldTop(matchStat.getAutoShieldTop() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getAutoShieldTop(), 2, 1);
+        }
+        if (clickRow == 3 && clickCol == 0) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setAutoShieldInner(matchStat.getAutoShieldInner() + 1);
+            } else {
+                matchStat.setAutoShieldInner(matchStat.getAutoShieldInner() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getAutoShieldInner(), 3, 1);
+        }
+        if (clickRow == 0 && clickCol == 2) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setTeleShieldBottom(matchStat.getTeleShieldBottom() + 1);
+            } else {
+                matchStat.setTeleShieldBottom(matchStat.getTeleShieldBottom() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getTeleShieldBottom(), 0, 3);
+        }
+        if (clickRow == 1 && clickCol == 2) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setTeleShieldTop(matchStat.getTeleShieldTop() + 1);
+            } else {
+                matchStat.setTeleShieldTop(matchStat.getTeleShieldTop() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getTeleShieldTop(), 1, 3);
+        }
+        if (clickRow == 2 && clickCol == 2) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setTeleShieldInner(matchStat.getTeleShieldInner() + 1);
+            } else {
+                matchStat.setTeleShieldInner(matchStat.getTeleShieldInner() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getTeleShieldInner(), 2, 3);
+        }
+        if (clickRow == 3 && (clickCol >= 2 && clickCol <= 3)) {
+            matchStat.setRotControl(!matchStat.isRotControl());
+            table_scouting.setValueAt(table_scouting.getValueAt(3, 2), 3, 2);
+            table_scouting.setValueAt(table_scouting.getValueAt(3, 3), 3, 3);
+        }
+        if (clickRow == 4 && (clickCol >= 2 && clickCol <= 3)) {
+            matchStat.setPosControl(!matchStat.isPosControl());
+            table_scouting.setValueAt(table_scouting.getValueAt(4, 2), 4, 2);
+            table_scouting.setValueAt(table_scouting.getValueAt(4, 3), 4, 3);
+        }
+        if (clickRow == 0 && (clickCol >= 4 && clickCol <= 5)) {
+            matchStat.setPark(!matchStat.isPark());
+            table_scouting.setValueAt(table_scouting.getValueAt(0, 4), 0, 4);
+            table_scouting.setValueAt(table_scouting.getValueAt(0, 5), 0, 5);
+        }
+        if (clickRow == 1 && (clickCol >= 4 && clickCol <= 5)) {
+            matchStat.setHang(!matchStat.isHang());
+            table_scouting.setValueAt(table_scouting.getValueAt(1, 4), 1, 4);
+            table_scouting.setValueAt(table_scouting.getValueAt(1, 5), 1, 5);
+        }
+        if (clickRow == 2 && (clickCol >= 4 && clickCol <= 5)) {
+            matchStat.setLevel(!matchStat.isLevel());
+            table_scouting.setValueAt(table_scouting.getValueAt(2, 4), 2, 4);
+            table_scouting.setValueAt(table_scouting.getValueAt(2, 5), 2, 5);
+        }
+        if (clickRow == 3 && clickCol == 4) {
+            if (evt.getClickCount() == 1) {
+                matchStat.setHost(matchStat.getHost() + 1);
+            } else {
+                matchStat.setHost(matchStat.getHost() - 2);
+            }
+            table_scouting.setValueAt(matchStat.getHost(), 3, 5);
         }
     }//GEN-LAST:event_table_scoutingMouseClicked
 
@@ -132,6 +222,7 @@ public class ScoutingWindow extends javax.swing.JFrame {
             matchStat = ms;
         }
         
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             if (row % 2 == 0) {

@@ -30,9 +30,14 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
         
+        setTitle("ValorScout");
+        
         teams = new TreeMap<>();
         rankedTeams = new TreeSet<>();
         matches = new TreeMap<>();
+        
+        eventKey = "2019txaus";
+        loadEvent();
     }
     
     /**
