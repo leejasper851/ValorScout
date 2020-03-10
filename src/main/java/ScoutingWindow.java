@@ -1,5 +1,6 @@
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.*;
 
@@ -16,15 +17,19 @@ import javax.swing.table.*;
 public class ScoutingWindow extends javax.swing.JFrame {
     MainWindow mainWindow;
     MatchStat matchStat;
+    int match;
+    int team;
     
     /**
      * Creates new form ScoutingWindow
      */
-    public ScoutingWindow(MainWindow mw, MatchStat ms) {
+    public ScoutingWindow(MainWindow mw, MatchStat ms, int m, int t) {
         initComponents();
         
         mainWindow = mw;
         matchStat = ms;
+        match = m;
+        team = t;
         
         table_scouting.setValueAt("Cross Line", 0, 0);
         table_scouting.setValueAt("Bottom", 1, 0);
@@ -128,50 +133,50 @@ public class ScoutingWindow extends javax.swing.JFrame {
             table_scouting.setValueAt(table_scouting.getValueAt(0, 1), 0, 1);
         }
         if (clickRow == 1 && clickCol == 0) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setAutoShieldBottom(matchStat.getAutoShieldBottom() + 1);
             } else {
-                matchStat.setAutoShieldBottom(matchStat.getAutoShieldBottom() - 2);
+                matchStat.setAutoShieldBottom(matchStat.getAutoShieldBottom() - 1);
             }
             table_scouting.setValueAt(matchStat.getAutoShieldBottom(), 1, 1);
         }
         if (clickRow == 2 && clickCol == 0) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setAutoShieldTop(matchStat.getAutoShieldTop() + 1);
             } else {
-                matchStat.setAutoShieldTop(matchStat.getAutoShieldTop() - 2);
+                matchStat.setAutoShieldTop(matchStat.getAutoShieldTop() - 1);
             }
             table_scouting.setValueAt(matchStat.getAutoShieldTop(), 2, 1);
         }
         if (clickRow == 3 && clickCol == 0) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setAutoShieldInner(matchStat.getAutoShieldInner() + 1);
             } else {
-                matchStat.setAutoShieldInner(matchStat.getAutoShieldInner() - 2);
+                matchStat.setAutoShieldInner(matchStat.getAutoShieldInner() - 1);
             }
             table_scouting.setValueAt(matchStat.getAutoShieldInner(), 3, 1);
         }
         if (clickRow == 0 && clickCol == 2) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setTeleShieldBottom(matchStat.getTeleShieldBottom() + 1);
             } else {
-                matchStat.setTeleShieldBottom(matchStat.getTeleShieldBottom() - 2);
+                matchStat.setTeleShieldBottom(matchStat.getTeleShieldBottom() - 1);
             }
             table_scouting.setValueAt(matchStat.getTeleShieldBottom(), 0, 3);
         }
         if (clickRow == 1 && clickCol == 2) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setTeleShieldTop(matchStat.getTeleShieldTop() + 1);
             } else {
-                matchStat.setTeleShieldTop(matchStat.getTeleShieldTop() - 2);
+                matchStat.setTeleShieldTop(matchStat.getTeleShieldTop() - 1);
             }
             table_scouting.setValueAt(matchStat.getTeleShieldTop(), 1, 3);
         }
         if (clickRow == 2 && clickCol == 2) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setTeleShieldInner(matchStat.getTeleShieldInner() + 1);
             } else {
-                matchStat.setTeleShieldInner(matchStat.getTeleShieldInner() - 2);
+                matchStat.setTeleShieldInner(matchStat.getTeleShieldInner() - 1);
             }
             table_scouting.setValueAt(matchStat.getTeleShieldInner(), 2, 3);
         }
@@ -201,13 +206,35 @@ public class ScoutingWindow extends javax.swing.JFrame {
             table_scouting.setValueAt(table_scouting.getValueAt(2, 5), 2, 5);
         }
         if (clickRow == 3 && clickCol == 4) {
-            if (evt.getClickCount() == 1) {
+            if (evt.getButton() == MouseEvent.BUTTON1) {
                 matchStat.setHost(matchStat.getHost() + 1);
             } else {
-                matchStat.setHost(matchStat.getHost() - 2);
+                matchStat.setHost(matchStat.getHost() - 1);
             }
             table_scouting.setValueAt(matchStat.getHost(), 3, 5);
         }
+        if (clickCol == 6) {
+            if (clickRow == 0) {
+                matchStat.setDefense(-1);
+            }
+            if (clickRow == 1) {
+                matchStat.setDefense(0);
+            }
+            if (clickRow == 2) {
+                matchStat.setDefense(1);
+            }
+            if (clickRow == 3) {
+                matchStat.setDefense(2);
+            }
+            if (clickRow == 4) {
+                matchStat.setDefense(3);
+            }
+            for (int i = 0; i <= 4; i++) {
+                table_scouting.setValueAt(table_scouting.getValueAt(i, 6), i, 6);
+            }
+        }
+        
+        mainWindow.updateScore(match, team);
     }//GEN-LAST:event_table_scoutingMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

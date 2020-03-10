@@ -260,10 +260,10 @@ public class MainWindow extends javax.swing.JFrame {
             int team = (int) table_scouting.getValueAt(clickRow, clickCol);
             int match = clickRow+1;
             
-            MatchStat matchStat = new MatchStat();
-            teams.get(team).addTeamStat(match, matchStat);
+            MatchStat matchStat = teams.get(team).getTeamStats().get(match);
             
-            ScoutingWindow scoutingWindow = new ScoutingWindow(this, matchStat);
+            ScoutingWindow scoutingWindow = new ScoutingWindow(this, matchStat, match, team);
+            scoutingWindow.setTitle("Q-" + match + ": " + team);
             scoutingWindow.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             scoutingWindow.setVisible(true);
         }
@@ -452,10 +452,24 @@ public class MainWindow extends javax.swing.JFrame {
             int blueScore = (int) (long) blueAlliance.get("score");
             
             matches.put(matchNum, new QualsMatch(matchNum, red1, red2, red3, blue1, blue2, blue3, redScore, blueScore));
+            
+            teams.get(red1).addTeamStat(matchNum, new MatchStat());
+            teams.get(red2).addTeamStat(matchNum, new MatchStat());
+            teams.get(red3).addTeamStat(matchNum, new MatchStat());
+            teams.get(blue1).addTeamStat(matchNum, new MatchStat());
+            teams.get(blue2).addTeamStat(matchNum, new MatchStat());
+            teams.get(blue3).addTeamStat(matchNum, new MatchStat());
         }
         
         updateMatchesTable();
         updateScoutingTable();
+        updateTeamsTable();
+    }
+    
+    public void updateScore(int match, int team) {
+        matches.get(match).updateScore(team, teams.get(team).getTeamStats().get(match).getTotalPoints());
+        
+        updateMatchesTable();
     }
     
     private void updateTeamsTable() {
@@ -490,8 +504,10 @@ public class MainWindow extends javax.swing.JFrame {
             matchData[4] = match.getBlue1();
             matchData[5] = match.getBlue2();
             matchData[6] = match.getBlue3();
-            matchData[7] = (match.getRealRedScore() == 0) ? match.getScoutRedScore() : match.getRealRedScore();
-            matchData[8] = (match.getRealBlueScore() == 0) ? match.getScoutBlueScore() : match.getRealBlueScore();
+//            matchData[7] = (match.getRealRedScore() == 0) ? match.getScoutRedScore() : match.getRealRedScore();
+//            matchData[8] = (match.getRealBlueScore() == 0) ? match.getScoutBlueScore() : match.getRealBlueScore();
+            matchData[7] = match.getScoutRedScore();
+            matchData[8] = match.getScoutBlueScore();
             
             model.addRow(matchData);
         }

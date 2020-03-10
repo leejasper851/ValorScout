@@ -15,12 +15,12 @@ public abstract class Match {
     private int blue1;
     private int blue2;
     private int blue3;
-    private int redScore1;
-    private int redScore2;
-    private int redScore3;
-    private int blueScore1;
-    private int blueScore2;
-    private int blueScore3;
+    private int red1Score;
+    private int red2Score;
+    private int red3Score;
+    private int blue1Score;
+    private int blue2Score;
+    private int blue3Score;
     private int scoutRedScore;
     private int scoutBlueScore;
     private int realRedScore;
@@ -36,12 +36,12 @@ public abstract class Match {
         this.realRedScore = realRedScore;
         this.realBlueScore = realBlueScore;
         
-        redScore1 = 0;
-        redScore2 = 0;
-        redScore3 = 0;
-        blueScore1 = 0;
-        blueScore2 = 0;
-        blueScore3 = 0;
+        red1Score = 0;
+        red2Score = 0;
+        red3Score = 0;
+        blue1Score = 0;
+        blue2Score = 0;
+        blue3Score = 0;
         scoutRedScore = 0;
         scoutBlueScore = 0;
     }
@@ -70,52 +70,52 @@ public abstract class Match {
         return blue3;
     }
 
-    public int getRedScore1() {
-        return redScore1;
+    public int getRed1Score() {
+        return red1Score;
     }
 
-    public void setRedScore1(int redScore1) {
-        this.redScore1 = redScore1;
+    public void setRed1Score(int red1Score) {
+        this.red1Score = red1Score;
     }
 
-    public int getRedScore2() {
-        return redScore2;
+    public int getRed2Score() {
+        return red2Score;
     }
 
-    public void setRedScore2(int redScore2) {
-        this.redScore2 = redScore2;
+    public void setRed2Score(int red2Score) {
+        this.red2Score = red2Score;
     }
 
-    public int getRedScore3() {
-        return redScore3;
+    public int getRed3Score() {
+        return red3Score;
     }
 
-    public void setRedScore3(int redScore3) {
-        this.redScore3 = redScore3;
+    public void setRed3Score(int red3Score) {
+        this.red3Score = red3Score;
     }
 
-    public int getBlueScore1() {
-        return blueScore1;
+    public int getBlue1Score() {
+        return blue1Score;
     }
 
-    public void setBlueScore1(int blueScore1) {
-        this.blueScore1 = blueScore1;
+    public void setBlue1Score(int blue1Score) {
+        this.blue1Score = blue1Score;
     }
 
-    public int getBlueScore2() {
-        return blueScore2;
+    public int getBlue2Score() {
+        return blue2Score;
     }
 
-    public void setBlueScore2(int blueScore2) {
-        this.blueScore2 = blueScore2;
+    public void setBlue2Score(int blue2Score) {
+        this.blue2Score = blue2Score;
     }
 
-    public int getBlueScore3() {
-        return blueScore3;
+    public int getBlue3Score() {
+        return blue3Score;
     }
 
-    public void setBlueScore3(int blueScore3) {
-        this.blueScore3 = blueScore3;
+    public void setBlue3Score(int blue3Score) {
+        this.blue3Score = blue3Score;
     }
 
     public int getScoutRedScore() {
@@ -148,5 +148,33 @@ public abstract class Match {
 
     public void setRealBlueScore(int realBlueScore) {
         this.realBlueScore = realBlueScore;
+    }
+    
+    public void updateScore(int team, int score) {
+        if (team == red1) {
+            red1Score = score;
+        }
+        if (team == red2) {
+            red2Score = score;
+        }
+        if (team == red3) {
+            red3Score = score;
+        }
+        if (team == blue1) {
+            blue1Score = score;
+        }
+        if (team == blue2) {
+            blue2Score = score;
+        }
+        if (team == blue3) {
+            blue3Score = score;
+        }
+        
+        updateTotalScores();
+    }
+    
+    private void updateTotalScores() {
+        scoutRedScore = red1Score + red2Score + red3Score;
+        scoutBlueScore = blue1Score + blue2Score + blue3Score;
     }
 }
