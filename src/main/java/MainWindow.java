@@ -665,9 +665,9 @@ public class MainWindow extends javax.swing.JFrame {
             String teamMatches = team.getTeamStats().keySet().toString();
             teamMatches = teamMatches.substring(1, teamMatches.length()-1);
             teamData[5] = teamMatches;
-            if (comboBox_displayStat.getSelectedItem().equals("Average Score")) {
-                teamData[6] = team.getAverageScore();
-            } else {
+            if (comboBox_displayStat.getSelectedItem().equals("Average Points")) {
+                teamData[6] = team.getAveragePoints();
+            } else if (comboBox_displayStat.getSelectedItem().equals("Average Defense")) {
                 teamData[6] = team.getAverageDefense();
             }
             

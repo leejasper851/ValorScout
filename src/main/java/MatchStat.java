@@ -187,10 +187,22 @@ public class MatchStat implements Serializable{
     }
     
     public int getTotalPoints() {
-        int totalPoints = (crossLine ? 5 : 0) + autoShieldBottom * 2 + autoShieldTop * 4 + autoShieldInner * 6
-                + teleShieldBottom + teleShieldTop * 2 + teleShieldInner * 3
-                + (rotControl ? 10 : 0) + (posControl ? 20 : 0)
-                + (park ? 5 : 0) + (hang ? 25 : 0) + (level ? 15 : 0) + host * 25;
-        return totalPoints;
+        return (crossLine ? 5 : 0) + autoShieldBottom * 2 + autoShieldTop * 4 + autoShieldInner * 6
+            + teleShieldBottom + teleShieldTop * 2 + teleShieldInner * 3
+            + (rotControl ? 10 : 0) + (posControl ? 20 : 0)
+            + (park ? 5 : 0) + (hang ? 25 : 0) + (level ? 15 : 0) + host * 25;
+    }
+    
+    public int getAutoPoints() {
+        return (crossLine ? 5 : 0) + autoShieldBottom * 2 + autoShieldTop * 4 + autoShieldInner * 6;
+    }
+    
+    public int getTelePoints() {
+        return teleShieldBottom + teleShieldTop * 2 + teleShieldInner * 3
+            + (rotControl ? 10 : 0) + (posControl ? 20 : 0);
+    }
+    
+    public int getEndgamePoints() {
+        return (park ? 5 : 0) + (hang ? 25 : 0) + (level ? 15 : 0) + host * 25;
     }
 }

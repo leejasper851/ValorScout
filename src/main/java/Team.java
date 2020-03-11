@@ -68,12 +68,57 @@ public class Team implements Serializable {
         teamStats.put(matchNum, teamStat);
     }
     
-    public int getAverageScore() {
+    public int getAveragePoints() {
         int sum = 0;
         int num = 0;
         for (int match : teamStats.keySet()) {
             if (teamStats.get(match).isPlayed()) {
                 sum += teamStats.get(match).getTotalPoints();
+                num++;
+            }
+        }
+        if (num == 0) {
+            return 0;
+        }
+        return sum / num;
+    }
+    
+    public int getAverageAuto() {
+        int sum = 0;
+        int num = 0;
+        for (int match : teamStats.keySet()) {
+            if (teamStats.get(match).isPlayed()) {
+                sum += teamStats.get(match).getAutoPoints();
+                num++;
+            }
+        }
+        if (num == 0) {
+            return 0;
+        }
+        return sum / num;
+    }
+    
+    public int getAverageTele() {
+        int sum = 0;
+        int num = 0;
+        for (int match : teamStats.keySet()) {
+            if (teamStats.get(match).isPlayed()) {
+                sum += teamStats.get(match).getTelePoints();
+                num++;
+            }
+        }
+        if (num == 0) {
+            return 0;
+        }
+        return sum / num;
+    }
+    
+    public int getAverageEndgame() {
+        int sum = 0;
+        int num = 0;
+        for (int match : teamStats.keySet()) {
+            if (teamStats.get(match).isPlayed()) {
+                sum += teamStats.get(match).getEndgamePoints();
                 num++;
             }
         }
