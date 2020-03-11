@@ -40,6 +40,25 @@ public class MatchStat {
         host = 0;
         defense = 0;
     }
+
+    public MatchStat(boolean crossLine, int autoShieldBottom, int autoShieldTop, int autoShieldInner, int teleShieldBottom, int teleShieldTop, int teleShieldInner, boolean rotControl, boolean posControl, boolean park, boolean hang, boolean level, int host, int defense) {
+        this.crossLine = crossLine;
+        this.autoShieldBottom = autoShieldBottom;
+        this.autoShieldTop = autoShieldTop;
+        this.autoShieldInner = autoShieldInner;
+        this.teleShieldBottom = teleShieldBottom;
+        this.teleShieldTop = teleShieldTop;
+        this.teleShieldInner = teleShieldInner;
+        this.rotControl = rotControl;
+        this.posControl = posControl;
+        this.park = park;
+        this.hang = hang;
+        this.level = level;
+        this.host = host;
+        this.defense = defense;
+    }
+    
+    
     
     public boolean isCrossLine() {
         return crossLine;

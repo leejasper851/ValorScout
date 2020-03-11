@@ -1,7 +1,10 @@
 
 import java.awt.event.*;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import okhttp3.*;
@@ -64,6 +67,8 @@ public class MainWindow extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         menu_file = new javax.swing.JMenu();
         menuItem_setEvent = new javax.swing.JMenuItem();
+        jMenuItem_Upload = new javax.swing.JMenuItem();
+        jMenuItem_Download = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -219,6 +224,22 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menu_file.add(menuItem_setEvent);
 
+        jMenuItem_Upload.setText("Upload to Sheets");
+        jMenuItem_Upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_UploadActionPerformed(evt);
+            }
+        });
+        menu_file.add(jMenuItem_Upload);
+
+        jMenuItem_Download.setText("Download from Sheets");
+        jMenuItem_Download.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_DownloadActionPerformed(evt);
+            }
+        });
+        menu_file.add(jMenuItem_Download);
+
         menuBar.add(menu_file);
 
         setJMenuBar(menuBar);
@@ -269,6 +290,30 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_table_scoutingMouseClicked
 
+    private void jMenuItem_UploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_UploadActionPerformed
+        try {
+            SheetsAndJava.writeToSheet(teams);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem_UploadActionPerformed
+
+    private void jMenuItem_DownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_DownloadActionPerformed
+        try {
+            teams = SheetsAndJava.readFromSheet();
+            updateTeamsTable();
+            
+            for()
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jMenuItem_DownloadActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -306,6 +351,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox comboBox_displayStat;
+    private javax.swing.JMenuItem jMenuItem_Download;
+    private javax.swing.JMenuItem jMenuItem_Upload;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuItem_setEvent;
     private javax.swing.JMenu menu_file;

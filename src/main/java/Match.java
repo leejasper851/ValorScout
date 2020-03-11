@@ -172,6 +172,17 @@ public abstract class Match {
         
         updateTotalScores();
     }
+
+    public void updateMatchScores(int red1Score, int red2Score, int red3Score, int blue1Score, int blue2Score, int blue3Score) {
+        this.red1Score = red1Score;
+        this.red2Score = red2Score;
+        this.red3Score = red3Score;
+        this.blue1Score = blue1Score;
+        this.blue2Score = blue2Score;
+        this.blue3Score = blue3Score;
+    }
+    
+    
     
     private void updateTotalScores() {
         scoutRedScore = red1Score + red2Score + red3Score;
