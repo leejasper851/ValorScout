@@ -60,6 +60,8 @@ public class ScoutingWindow extends javax.swing.JFrame {
         for (int i = 0; i < table_scouting.getColumnCount(); i++) {
             table_scouting.setDefaultRenderer(table_scouting.getColumnClass(i), new ScoutingCellRenderer(matchStat));
         }
+        
+        matchStat.setPlayed(true);
     }
 
     /**

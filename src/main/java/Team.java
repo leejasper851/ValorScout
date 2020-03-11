@@ -66,4 +66,34 @@ public class Team {
     public void addTeamStat(int matchNum, MatchStat teamStat) {
         teamStats.put(matchNum, teamStat);
     }
+    
+    public int getAverageScore() {
+        int sum = 0;
+        int num = 0;
+        for (int match : teamStats.keySet()) {
+            if (teamStats.get(match).getTotalPoints() > 0) {
+                sum += teamStats.get(match).getTotalPoints();
+                num++;
+            }
+        }
+        if (num == 0) {
+            return 0;
+        }
+        return sum / num;
+    }
+    
+    public double getAverageDefense() {
+        int sum = 0;
+        int num = 0;
+        for (int match : teamStats.keySet()) {
+            if (teamStats.get(match).getTotalPoints() > 0 || teamStats.get(match).getDefense() != 0) {
+                sum += teamStats.get(match).getDefense();
+                num++;
+            }
+        }
+        if (num == 0) {
+            return 0;
+        }
+        return ((double) sum) / num;
+    }
 }

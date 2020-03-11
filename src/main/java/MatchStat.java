@@ -23,6 +23,7 @@ public class MatchStat {
     private boolean level;
     private int host;
     private int defense;
+    private boolean played;
 
     public MatchStat() {
         crossLine = false;
@@ -39,9 +40,10 @@ public class MatchStat {
         level = false;
         host = 0;
         defense = 0;
+        played = false;
     }
 
-    public MatchStat(boolean crossLine, int autoShieldBottom, int autoShieldTop, int autoShieldInner, int teleShieldBottom, int teleShieldTop, int teleShieldInner, boolean rotControl, boolean posControl, boolean park, boolean hang, boolean level, int host, int defense) {
+    public MatchStat(boolean crossLine, int autoShieldBottom, int autoShieldTop, int autoShieldInner, int teleShieldBottom, int teleShieldTop, int teleShieldInner, boolean rotControl, boolean posControl, boolean park, boolean hang, boolean level, int host, int defense, boolean played) {
         this.crossLine = crossLine;
         this.autoShieldBottom = autoShieldBottom;
         this.autoShieldTop = autoShieldTop;
@@ -56,6 +58,7 @@ public class MatchStat {
         this.level = level;
         this.host = host;
         this.defense = defense;
+        this.played = played;
     }
     
     
@@ -170,6 +173,14 @@ public class MatchStat {
 
     public void setDefense(int defense) {
         this.defense = defense;
+    }
+
+    public boolean isPlayed() {
+        return played;
+    }
+
+    public void setPlayed(boolean played) {
+        this.played = played;
     }
     
     public int getTotalPoints() {

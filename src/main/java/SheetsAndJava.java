@@ -135,27 +135,29 @@ public class SheetsAndJava {
             if(!teamStats.isEmpty()){
                 for(Integer matchNumber:teamStats.keySet()) {
                     MatchStat m = teamStats.get(matchNumber);
-                    List<Object> matchInfo = new ArrayList<>();
-                    matchInfo.add(matchNumber);
-                    matchInfo.add(teamNumber);
-                    matchInfo.add(t.getName());
-                    matchInfo.add(m.isCrossLine());
-                    matchInfo.add(m.getAutoShieldBottom());
-                    matchInfo.add(m.getAutoShieldTop());
-                    matchInfo.add(m.getAutoShieldInner());
-                    matchInfo.add(m.getTeleShieldBottom());
-                    matchInfo.add(m.getTeleShieldTop());
-                    matchInfo.add(m.getTeleShieldInner());
-                    matchInfo.add(m.isRotControl());
-                    matchInfo.add(m.isPosControl());
-                    matchInfo.add(m.isPark());
-                    matchInfo.add(m.isHang());
-                    matchInfo.add(m.isLevel());
-                    matchInfo.add(m.getHost());
-                    matchInfo.add(m.getDefense());
-                    teamMatchHistory.add(matchInfo);
-                    System.out.println(matchInfo.toString());
-                    //matchInfo = new ArrayList<>();
+                    if(m.isPlayed()) {
+                        List<Object> matchInfo = new ArrayList<>();
+                        matchInfo.add(matchNumber);
+                        matchInfo.add(teamNumber);
+                        matchInfo.add(t.getName());
+                        matchInfo.add(m.isCrossLine());
+                        matchInfo.add(m.getAutoShieldBottom());
+                        matchInfo.add(m.getAutoShieldTop());
+                        matchInfo.add(m.getAutoShieldInner());
+                        matchInfo.add(m.getTeleShieldBottom());
+                        matchInfo.add(m.getTeleShieldTop());
+                        matchInfo.add(m.getTeleShieldInner());
+                        matchInfo.add(m.isRotControl());
+                        matchInfo.add(m.isPosControl());
+                        matchInfo.add(m.isPark());
+                        matchInfo.add(m.isHang());
+                        matchInfo.add(m.isLevel());
+                        matchInfo.add(m.getHost());
+                        matchInfo.add(m.getDefense());
+                        teamMatchHistory.add(matchInfo);
+                        //System.out.println(matchInfo.toString());
+                        //matchInfo = new ArrayList<>();
+                    }
                 }
             }
         }
@@ -207,7 +209,8 @@ public class SheetsAndJava {
                     Boolean.parseBoolean((String)row.get(13)), //hang
                     Boolean.parseBoolean((String)row.get(14)), //level
                     Integer.parseInt((String)row.get(15)), //host
-                    Integer.parseInt((String)row.get(16))) //defense
+                    Integer.parseInt((String)row.get(16)), //defense
+                    true) //played
                     );
             }
         }
