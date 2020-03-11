@@ -108,7 +108,7 @@
                         <Column editable="false" title="OPR" type="java.lang.Double"/>
                         <Column editable="false" title="DPR" type="java.lang.Double"/>
                         <Column editable="false" title="Matches" type="java.lang.String"/>
-                        <Column editable="false" title="(Display Stat)" type="java.lang.Object"/>
+                        <Column editable="false" title="Display Stat" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -168,6 +168,9 @@
                   </StringArray>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBox_displayStatActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

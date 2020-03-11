@@ -36,6 +36,10 @@ public class MainWindow extends javax.swing.JFrame {
         rankedTeams = new TreeSet<>();
         matches = new TreeMap<>();
         
+        comboBox_displayStat.removeAllItems();
+        comboBox_displayStat.addItem("Average Score");
+        comboBox_displayStat.addItem("Average Defense");
+        
         eventKey = "2019txaus";
         loadEvent();
     }
@@ -72,7 +76,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Team", "Name", "RP", "OPR", "DPR", "Matches", "(Display Stat)"
+                "Team", "Name", "RP", "OPR", "DPR", "Matches", "Display Stat"
             }
         ) {
             Class[] types = new Class [] {
@@ -93,6 +97,11 @@ public class MainWindow extends javax.swing.JFrame {
         scrollPane_teams.setViewportView(table_teams);
 
         comboBox_displayStat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBox_displayStat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBox_displayStatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_teamsLayout = new javax.swing.GroupLayout(panel_teams);
         panel_teams.setLayout(panel_teamsLayout);
@@ -268,6 +277,10 @@ public class MainWindow extends javax.swing.JFrame {
             scoutingWindow.setVisible(true);
         }
     }//GEN-LAST:event_table_scoutingMouseClicked
+
+    private void comboBox_displayStatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_displayStatActionPerformed
+        updateTeamsTable();
+    }//GEN-LAST:event_comboBox_displayStatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -466,12 +479,6 @@ public class MainWindow extends javax.swing.JFrame {
         updateTeamsTable();
     }
     
-    public void updateScore(int match, int team) {
-        matches.get(match).updateScore(team, teams.get(team).getTeamStats().get(match).getTotalPoints());
-        
-        updateMatchesTable();
-    }
-    
     private void updateTeamsTable() {
         DefaultTableModel model = (DefaultTableModel) table_teams.getModel();
         model.setRowCount(0);
@@ -486,6 +493,11 @@ public class MainWindow extends javax.swing.JFrame {
             String teamMatches = team.getTeamStats().keySet().toString();
             teamMatches = teamMatches.substring(1, teamMatches.length()-1);
             teamData[5] = teamMatches;
+            if (comboBox_displayStat.getSelectedItem().equals("Average Score")) {
+                teamData[6] = team.getAverageScore();
+            } else {
+                teamData[6] = team.getAverageDefense();
+            }
             
             model.addRow(teamData);
         }
@@ -529,5 +541,12 @@ public class MainWindow extends javax.swing.JFrame {
             
             model.addRow(matchData);
         }
+    }
+    
+    public void updateScore(int match, int team) {
+        matches.get(match).updateScore(team, teams.get(team).getTeamStats().get(match).getTotalPoints());
+        
+        updateMatchesTable();
+        updateTeamsTable();
     }
 }
