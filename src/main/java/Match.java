@@ -1,3 +1,6 @@
+
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,7 +11,7 @@
  *
  * @author lee_934859
  */
-public abstract class Match {
+public abstract class Match implements Serializable {
     private int red1;
     private int red2;
     private int red3;

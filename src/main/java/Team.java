@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
 /**
  *
  * @author lee_934859
  */
-public class Team {
+public class Team implements Serializable {
     private int number;
     private String name;
     private int rp;

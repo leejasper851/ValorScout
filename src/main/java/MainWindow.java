@@ -1,10 +1,17 @@
 
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import okhttp3.*;
@@ -27,6 +34,11 @@ public class MainWindow extends javax.swing.JFrame {
     private TreeMap<Integer, QualsMatch> matches;
     private String eventKey;
     
+    private File currentFile;
+    private EventModel event;
+    
+    
+    
     /**
      * Creates new form MainWindow
      */
@@ -38,6 +50,9 @@ public class MainWindow extends javax.swing.JFrame {
         teams = new TreeMap<>();
         rankedTeams = new TreeSet<>();
         matches = new TreeMap<>();
+        
+        currentFile = null;
+        event = new EventModel();
         
         comboBox_displayStat.removeAllItems();
         comboBox_displayStat.addItem("Average Score");
@@ -73,6 +88,9 @@ public class MainWindow extends javax.swing.JFrame {
         menuItem_setEvent = new javax.swing.JMenuItem();
         jMenuItem_Upload = new javax.swing.JMenuItem();
         jMenuItem_Download = new javax.swing.JMenuItem();
+        jMenuItem_SaveAs = new javax.swing.JMenuItem();
+        jMenuItem_Save = new javax.swing.JMenuItem();
+        jMenuItem_Open = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -249,6 +267,30 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menu_file.add(jMenuItem_Download);
 
+        jMenuItem_SaveAs.setText("Save As");
+        jMenuItem_SaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_SaveAsActionPerformed(evt);
+            }
+        });
+        menu_file.add(jMenuItem_SaveAs);
+
+        jMenuItem_Save.setText("Save");
+        jMenuItem_Save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_SaveActionPerformed(evt);
+            }
+        });
+        menu_file.add(jMenuItem_Save);
+
+        jMenuItem_Open.setText("Open");
+        jMenuItem_Open.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_OpenActionPerformed(evt);
+            }
+        });
+        menu_file.add(jMenuItem_Open);
+
         menuBar.add(menu_file);
 
         setJMenuBar(menuBar);
@@ -312,10 +354,28 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jMenuItem_DownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_DownloadActionPerformed
         try {
-            teams = SheetsAndJava.readFromSheet();
+            
+            TreeMap<Integer, Team> teamsFromSheets = SheetsAndJava.readFromSheet();
+            for(Integer teamNumber: teamsFromSheets.keySet()) {
+                teams.put(teamNumber, teamsFromSheets.get(teamNumber));
+            }
             updateTeamsTable();
             
-            //for()
+            //updates matches based on what teams have played
+            for(Integer matchNumber : matches.keySet()) {
+                Match m = matches.get(matchNumber);
+                
+                m.updateMatchScores(
+                        teams.get(m.getRed1()).getTeamStats().containsKey(matchNumber) ? teams.get(m.getRed1()).getTeamStats().get(matchNumber).getTotalPoints() : 0,
+                        teams.get(m.getRed2()).getTeamStats().containsKey(matchNumber) ? teams.get(m.getRed2()).getTeamStats().get(matchNumber).getTotalPoints() : 0,
+                        teams.get(m.getRed3()).getTeamStats().containsKey(matchNumber) ? teams.get(m.getRed3()).getTeamStats().get(matchNumber).getTotalPoints() : 0,
+                        teams.get(m.getBlue1()).getTeamStats().containsKey(matchNumber) ? teams.get(m.getBlue1()).getTeamStats().get(matchNumber).getTotalPoints() : 0,
+                        teams.get(m.getBlue2()).getTeamStats().containsKey(matchNumber) ? teams.get(m.getBlue2()).getTeamStats().get(matchNumber).getTotalPoints() : 0,
+                        teams.get(m.getBlue3()).getTeamStats().containsKey(matchNumber) ? teams.get(m.getBlue3()).getTeamStats().get(matchNumber).getTotalPoints() : 0
+                );
+            }
+            
+            updateMatchesTable();
         } catch (IOException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (GeneralSecurityException ex) {
@@ -327,6 +387,66 @@ public class MainWindow extends javax.swing.JFrame {
     private void comboBox_displayStatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_displayStatActionPerformed
         updateTeamsTable();
     }//GEN-LAST:event_comboBox_displayStatActionPerformed
+
+    private void jMenuItem_SaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveAsActionPerformed
+        // TODO add your handling code here:
+         JFileChooser jfc = new JFileChooser();
+
+        jfc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        if (jfc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            writeModelToFile(jfc.getSelectedFile()); 
+        }
+    }//GEN-LAST:event_jMenuItem_SaveAsActionPerformed
+
+    private void jMenuItem_OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_OpenActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            JFileChooser jfc = new JFileChooser();
+            jfc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            
+            if(jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                FileInputStream fis  = new FileInputStream(jfc.getSelectedFile());
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                
+                event = (EventModel)ois.readObject();
+                 
+                eventKey = event.getEventKey();
+                teams = event.getTeams();
+                matches = event.getMatches();
+                
+                System.out.println(eventKey);
+                System.out.println(teams.size());
+                System.out.println(matches.size());
+                
+                updateTeamsTable();
+                updateMatchesTable();
+                updateScoutingTable();
+            }
+   
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "ERROR: File not found", "ok beast 2", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "ERROR: File not found", "ok beast 2", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "ERROR: File not found", "ok beast 2", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jMenuItem_OpenActionPerformed
+
+    private void jMenuItem_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveActionPerformed
+        // TODO add your handling code here:
+         if (currentFile == null) {
+            jMenuItem_SaveAsActionPerformed(evt);
+        }
+        else{
+            writeModelToFile(currentFile);   
+            //jMenuItem_save.setEnabled(false);
+        }
+    }//GEN-LAST:event_jMenuItem_SaveActionPerformed
 //>>>>>>> b7eb578fdef16200175103bb0eef3dce664255ee
 
     /**
@@ -367,6 +487,9 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox comboBox_displayStat;
     private javax.swing.JMenuItem jMenuItem_Download;
+    private javax.swing.JMenuItem jMenuItem_Open;
+    private javax.swing.JMenuItem jMenuItem_Save;
+    private javax.swing.JMenuItem jMenuItem_SaveAs;
     private javax.swing.JMenuItem jMenuItem_Upload;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuItem_setEvent;
@@ -597,5 +720,29 @@ public class MainWindow extends javax.swing.JFrame {
         
         updateMatchesTable();
         updateTeamsTable();
+    }
+
+    private void writeModelToFile(File file) {
+        try {
+            
+                FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                event.setEventKey(eventKey);
+                event.setTeams(teams);
+                event.setMatches(matches);
+                
+                oos.writeObject(event);
+                currentFile = file;
+                oos.close();
+                //menuItem_save.se();
+            
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "ERROR: File not found", "ok beast 2", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "ERROR: No permission", "ok beast 2", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
