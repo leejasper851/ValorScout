@@ -565,10 +565,8 @@ public class MainWindow extends javax.swing.JFrame {
             matchData[4] = match.getBlue1();
             matchData[5] = match.getBlue2();
             matchData[6] = match.getBlue3();
-//            matchData[7] = (match.getRealRedScore() == 0) ? match.getScoutRedScore() : match.getRealRedScore();
-//            matchData[8] = (match.getRealBlueScore() == 0) ? match.getScoutBlueScore() : match.getRealBlueScore();
-            matchData[7] = match.getScoutRedScore();
-            matchData[8] = match.getScoutBlueScore();
+            matchData[7] = (match.getRealRedScore() == 0) ? match.getScoutRedScore() : match.getRealRedScore();
+            matchData[8] = (match.getRealBlueScore() == 0) ? match.getScoutBlueScore() : match.getRealBlueScore();
             
             model.addRow(matchData);
         }

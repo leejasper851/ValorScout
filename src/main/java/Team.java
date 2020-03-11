@@ -71,7 +71,7 @@ public class Team {
         int sum = 0;
         int num = 0;
         for (int match : teamStats.keySet()) {
-            if (teamStats.get(match).getTotalPoints() > 0) {
+            if (teamStats.get(match).isPlayed()) {
                 sum += teamStats.get(match).getTotalPoints();
                 num++;
             }
@@ -86,7 +86,7 @@ public class Team {
         int sum = 0;
         int num = 0;
         for (int match : teamStats.keySet()) {
-            if (teamStats.get(match).getTotalPoints() > 0 || teamStats.get(match).getDefense() != 0) {
+            if (teamStats.get(match).isPlayed()) {
                 sum += teamStats.get(match).getDefense();
                 num++;
             }
