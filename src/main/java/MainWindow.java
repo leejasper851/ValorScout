@@ -55,7 +55,10 @@ public class MainWindow extends javax.swing.JFrame {
         event = new EventModel();
         
         comboBox_displayStat.removeAllItems();
-        comboBox_displayStat.addItem("Average Score");
+        comboBox_displayStat.addItem("Average Points");
+        comboBox_displayStat.addItem("Average Auto");
+        comboBox_displayStat.addItem("Average Teleop");
+        comboBox_displayStat.addItem("Average Endgame");
         comboBox_displayStat.addItem("Average Defense");
         
         eventKey = "2019txaus";
@@ -667,6 +670,12 @@ public class MainWindow extends javax.swing.JFrame {
             teamData[5] = teamMatches;
             if (comboBox_displayStat.getSelectedItem().equals("Average Points")) {
                 teamData[6] = team.getAveragePoints();
+            } else if (comboBox_displayStat.getSelectedItem().equals("Average Auto")) {
+                teamData[6] = team.getAverageAuto();
+            } else if (comboBox_displayStat.getSelectedItem().equals("Average Teleop")) {
+                teamData[6] = team.getAverageTele();
+            } else if (comboBox_displayStat.getSelectedItem().equals("Average Endgame")) {
+                teamData[6] = team.getAverageEndgame();
             } else if (comboBox_displayStat.getSelectedItem().equals("Average Defense")) {
                 teamData[6] = team.getAverageDefense();
             }
