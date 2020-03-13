@@ -213,7 +213,6 @@ public class SheetsAndJava {
                     true)); // played
             }
         }
-        
         return teams;
     }
 
