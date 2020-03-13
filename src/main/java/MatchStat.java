@@ -66,6 +66,7 @@ public class MatchStat implements Serializable{
     
     
     
+    
     public boolean isCrossLine() {
         return crossLine;
     }

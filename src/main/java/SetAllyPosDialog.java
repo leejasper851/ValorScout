@@ -72,7 +72,7 @@ public class SetAllyPosDialog extends javax.swing.JDialog {
     private void button_setAllyPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_setAllyPosActionPerformed
         String allyPos = textField_setAllyPos.getText();
         
-//        ((MainWindow) getParent()).setAllyPos(allyPos);
+        ((MainWindow) getParent()).setTitle(allyPos);
         
         dispose();
     }//GEN-LAST:event_button_setAllyPosActionPerformed

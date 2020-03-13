@@ -357,7 +357,13 @@ public class MainWindow extends javax.swing.JFrame {
         try {
             
             TreeMap<Integer, Team> teamsFromSheets = SheetsAndJava.readFromSheet();
-            for(Integer teamNumber: teamsFromSheets.keySet()) {
+            for(Integer teamNumber: teamsFromSheets.keySet()) { 
+                Set<Integer> matchSet = teams.get(teamNumber).getTeamStats().keySet();
+                for(Integer matchNumber : matchSet) {
+                    if(!teamsFromSheets.get(teamNumber).getTeamStats().containsKey(matchNumber)) {
+                        teamsFromSheets.get(teamNumber).addTeamStat(matchNumber, new MatchStat());
+                    }
+                }
                 teams.put(teamNumber, teamsFromSheets.get(teamNumber));
             }
             updateTeamsTable();
