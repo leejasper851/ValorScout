@@ -1,8 +1,4 @@
-import java.io.IOException;
-import javax.swing.JOptionPane;
-import okhttp3.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+package valorscout;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -71,9 +67,8 @@ public class SetAllyPosDialog extends javax.swing.JDialog {
 
     private void button_setAllyPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_setAllyPosActionPerformed
         String allyPos = textField_setAllyPos.getText();
-        
-        ((MainWindow) getParent()).setTitle(allyPos);
-        
+        ((MainWindow) getParent()).setTitle("ValorScout - " + allyPos);
+        ((MainWindow) getParent()).setAllyPos(allyPos);
         dispose();
     }//GEN-LAST:event_button_setAllyPosActionPerformed
 

@@ -1,3 +1,5 @@
+package valorscout;
+
 
 import java.io.Serializable;
 

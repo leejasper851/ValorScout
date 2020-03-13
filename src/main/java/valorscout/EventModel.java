@@ -1,3 +1,4 @@
+package valorscout;
 
 import java.io.Serializable;
 import java.util.TreeMap;
@@ -17,6 +18,7 @@ public class EventModel implements Serializable {
     private TreeMap<Integer, Team> teams;
     private TreeMap<Integer, QualsMatch> matches;
     private String eventKey;
+    private String allyPos;
 
     public EventModel(TreeMap<Integer, Team> teams, TreeMap<Integer, QualsMatch> matches, String eventKey) {
         this.teams = teams;
@@ -52,5 +54,13 @@ public class EventModel implements Serializable {
 
     public void setEventKey(String eventKey) {
         this.eventKey = eventKey;
+    }
+
+    public String getAllyPos() {
+        return allyPos;
+    }
+
+    public void setAllyPos(String allyPos) {
+        this.allyPos = allyPos;
     }
 }

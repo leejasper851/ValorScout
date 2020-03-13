@@ -1,3 +1,4 @@
+package valorscout;
 
 import java.awt.event.*;
 import java.io.File;
@@ -33,6 +34,7 @@ public class MainWindow extends javax.swing.JFrame {
     private TreeSet<Integer> rankedTeams;
     private TreeMap<Integer, QualsMatch> matches;
     private String eventKey;
+    private String allyPos;
     
     private File currentFile;
     private EventModel event;
@@ -51,6 +53,9 @@ public class MainWindow extends javax.swing.JFrame {
         
         currentFile = null;
         event = new EventModel();
+        
+        eventKey = "";
+        allyPos = "";
         
         comboBox_displayStat.removeAllItems();
         comboBox_displayStat.addItem("Average Points");
@@ -86,12 +91,15 @@ public class MainWindow extends javax.swing.JFrame {
         panel_simulations = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         menu_file = new javax.swing.JMenu();
-        menuItem_setEvent = new javax.swing.JMenuItem();
+        jMenuItem_Open = new javax.swing.JMenuItem();
+        jMenuItem_Save = new javax.swing.JMenuItem();
+        jMenuItem_SaveAs = new javax.swing.JMenuItem();
+        menu_sheets = new javax.swing.JMenu();
         jMenuItem_Upload = new javax.swing.JMenuItem();
         jMenuItem_Download = new javax.swing.JMenuItem();
-        jMenuItem_SaveAs = new javax.swing.JMenuItem();
-        jMenuItem_Save = new javax.swing.JMenuItem();
-        jMenuItem_Open = new javax.swing.JMenuItem();
+        menu_scout = new javax.swing.JMenu();
+        menuItem_setEvent = new javax.swing.JMenuItem();
+        menuItem_setAllyPos = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -244,37 +252,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         menu_file.setText("File");
 
-        menuItem_setEvent.setText("Set Event");
-        menuItem_setEvent.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem_Open.setText("Open");
+        jMenuItem_Open.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItem_setEventActionPerformed(evt);
+                jMenuItem_OpenActionPerformed(evt);
             }
         });
-        menu_file.add(menuItem_setEvent);
-
-        jMenuItem_Upload.setText("Upload to Sheets");
-        jMenuItem_Upload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_UploadActionPerformed(evt);
-            }
-        });
-        menu_file.add(jMenuItem_Upload);
-
-        jMenuItem_Download.setText("Download from Sheets");
-        jMenuItem_Download.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_DownloadActionPerformed(evt);
-            }
-        });
-        menu_file.add(jMenuItem_Download);
-
-        jMenuItem_SaveAs.setText("Save As");
-        jMenuItem_SaveAs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_SaveAsActionPerformed(evt);
-            }
-        });
-        menu_file.add(jMenuItem_SaveAs);
+        menu_file.add(jMenuItem_Open);
 
         jMenuItem_Save.setText("Save");
         jMenuItem_Save.addActionListener(new java.awt.event.ActionListener() {
@@ -284,15 +268,55 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menu_file.add(jMenuItem_Save);
 
-        jMenuItem_Open.setText("Open");
-        jMenuItem_Open.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem_SaveAs.setText("Save As");
+        jMenuItem_SaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_OpenActionPerformed(evt);
+                jMenuItem_SaveAsActionPerformed(evt);
             }
         });
-        menu_file.add(jMenuItem_Open);
+        menu_file.add(jMenuItem_SaveAs);
 
         menuBar.add(menu_file);
+
+        menu_sheets.setText("Sheets");
+
+        jMenuItem_Upload.setText("Upload to Sheets");
+        jMenuItem_Upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_UploadActionPerformed(evt);
+            }
+        });
+        menu_sheets.add(jMenuItem_Upload);
+
+        jMenuItem_Download.setText("Download from Sheets");
+        jMenuItem_Download.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_DownloadActionPerformed(evt);
+            }
+        });
+        menu_sheets.add(jMenuItem_Download);
+
+        menuBar.add(menu_sheets);
+
+        menu_scout.setText("Scout");
+
+        menuItem_setEvent.setText("Set Event");
+        menuItem_setEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem_setEventActionPerformed(evt);
+            }
+        });
+        menu_scout.add(menuItem_setEvent);
+
+        menuItem_setAllyPos.setText("Set Alliance Position");
+        menuItem_setAllyPos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem_setAllyPosActionPerformed(evt);
+            }
+        });
+        menu_scout.add(menuItem_setAllyPos);
+
+        menuBar.add(menu_scout);
 
         setJMenuBar(menuBar);
 
@@ -421,9 +445,11 @@ public class MainWindow extends javax.swing.JFrame {
                 
                 event = (EventModel)ois.readObject();
                 
-                eventKey = event.getEventKey();
                 teams = event.getTeams();
                 matches = event.getMatches();
+                eventKey = event.getEventKey();
+                allyPos = event.getAllyPos();
+                setTitle("ValorScout - " + allyPos);
                 
                 updateTeamsTable();
                 updateMatchesTable();
@@ -452,6 +478,12 @@ public class MainWindow extends javax.swing.JFrame {
             //jMenuItem_save.setEnabled(false);
         }
     }//GEN-LAST:event_jMenuItem_SaveActionPerformed
+
+    private void menuItem_setAllyPosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem_setAllyPosActionPerformed
+        SetAllyPosDialog dialog = new SetAllyPosDialog(this, true);
+        dialog.setTitle("Set Alliance Position");
+        dialog.setVisible(true);
+    }//GEN-LAST:event_menuItem_setAllyPosActionPerformed
 //>>>>>>> b7eb578fdef16200175103bb0eef3dce664255ee
 
     /**
@@ -497,8 +529,11 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_SaveAs;
     private javax.swing.JMenuItem jMenuItem_Upload;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItem_setAllyPos;
     private javax.swing.JMenuItem menuItem_setEvent;
     private javax.swing.JMenu menu_file;
+    private javax.swing.JMenu menu_scout;
+    private javax.swing.JMenu menu_sheets;
     private javax.swing.JPanel panel_matches;
     private javax.swing.JPanel panel_scouting;
     private javax.swing.JPanel panel_simulations;
@@ -514,6 +549,10 @@ public class MainWindow extends javax.swing.JFrame {
     
     public void setEventKey(String eventKey) {
         this.eventKey = eventKey;
+    }
+    
+    public void setAllyPos(String allyPos) {
+        this.allyPos = allyPos;
     }
     
     private JSONArray getJSONArray(String url) {
@@ -735,9 +774,10 @@ public class MainWindow extends javax.swing.JFrame {
         try {
                 FileOutputStream fos = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                event.setEventKey(eventKey);
                 event.setTeams(teams);
                 event.setMatches(matches);
+                event.setEventKey(eventKey);
+                event.setAllyPos(allyPos);
                 
                 oos.writeObject(event);
                 currentFile = file;

@@ -1,3 +1,5 @@
+package valorscout;
+
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
