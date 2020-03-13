@@ -37,8 +37,6 @@ public class MainWindow extends javax.swing.JFrame {
     private File currentFile;
     private EventModel event;
     
-    
-    
     /**
      * Creates new form MainWindow
      */
@@ -393,35 +391,33 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void jMenuItem_SaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveAsActionPerformed
         // TODO add your handling code here:
-         JFileChooser jfc = new JFileChooser();
-
+        JFileChooser jfc = new JFileChooser();
+        
         jfc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-
+        
         if (jfc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            writeModelToFile(jfc.getSelectedFile()); 
+            writeModelToFile(jfc.getSelectedFile());
         }
     }//GEN-LAST:event_jMenuItem_SaveAsActionPerformed
 
     private void jMenuItem_OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_OpenActionPerformed
-        // TODO add your handling code here:
         try {
-            // TODO add your handling code here:
-            JFileChooser jfc = new JFileChooser();
-            jfc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                currentFile = jfc.getSelectedFile();
+            } else {
+                return;
+            }
             
-            if(jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (jfc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 FileInputStream fis  = new FileInputStream(jfc.getSelectedFile());
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 
                 event = (EventModel)ois.readObject();
-                 
+                
                 eventKey = event.getEventKey();
                 teams = event.getTeams();
                 matches = event.getMatches();
-                
-                System.out.println(eventKey);
-                System.out.println(teams.size());
-                System.out.println(matches.size());
                 
                 updateTeamsTable();
                 updateMatchesTable();

@@ -196,22 +196,21 @@ public class SheetsAndJava {
                 }
                 Team t = teams.get(Integer.parseInt((String)row.get(1)));
                 t.addTeamStat(Integer.parseInt((String)row.get(0)), new MatchStat(
-                    Boolean.parseBoolean((String)row.get(3)), //CrossLine
-                    Integer.parseInt((String)row.get(4)), //AutoLow
-                    Integer.parseInt((String)row.get(5)), //AutoTop
-                    Integer.parseInt((String)row.get(6)), //AutoInner
-                    Integer.parseInt((String)row.get(7)), //TeleLow
-                    Integer.parseInt((String)row.get(8)), //TeleTop
-                    Integer.parseInt((String)row.get(9)), //TeleInner
-                    Boolean.parseBoolean((String)row.get(10)), //rotControl
-                    Boolean.parseBoolean((String)row.get(11)), //posContol
-                    Boolean.parseBoolean((String)row.get(12)), //park
-                    Boolean.parseBoolean((String)row.get(13)), //hang
-                    Boolean.parseBoolean((String)row.get(14)), //level
-                    Integer.parseInt((String)row.get(15)), //host
-                    Integer.parseInt((String)row.get(16)), //defense
-                    true) //played
-                    );
+                    Boolean.parseBoolean((String)row.get(3)), // CrossLine
+                    Integer.parseInt((String)row.get(4)), // AutoLow
+                    Integer.parseInt((String)row.get(5)), // AutoTop
+                    Integer.parseInt((String)row.get(6)), // AutoInner
+                    Integer.parseInt((String)row.get(7)), // TeleLow
+                    Integer.parseInt((String)row.get(8)), // TeleTop
+                    Integer.parseInt((String)row.get(9)), // TeleInner
+                    Boolean.parseBoolean((String)row.get(10)), // rotControl
+                    Boolean.parseBoolean((String)row.get(11)), // posContol
+                    Boolean.parseBoolean((String)row.get(12)), // park
+                    Boolean.parseBoolean((String)row.get(13)), // hang
+                    Boolean.parseBoolean((String)row.get(14)), // level
+                    Integer.parseInt((String)row.get(15)), // host
+                    Integer.parseInt((String)row.get(16)), // defense
+                    true)); // played
             }
         }
         
